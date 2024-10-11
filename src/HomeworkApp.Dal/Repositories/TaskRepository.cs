@@ -120,10 +120,10 @@ with recursive tasks_tree
         from tasks t
         join tasks_tree tt on tt.id = t.parent_task_id)
 
-select t.id
-     , t.title
-     , t.status
-     , t.path as path
+select t.id as task_id
+     , t.title as title
+     , t.status as status
+     , t.path as parent_task_ids
   from tasks_tree t
 ";
         await using var connection = await GetConnection();
