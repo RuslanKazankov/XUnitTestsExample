@@ -133,7 +133,7 @@ select t.id as task_id
                 new
                 {
                     ParentTaskId = parentTaskId,
-                    Statuses = statuses
+                    Statuses = statuses.Select(s => (int)s).ToArray()
                 }, 
                 cancellationToken: token));
 
