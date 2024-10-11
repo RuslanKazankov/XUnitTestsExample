@@ -23,6 +23,7 @@ public static class Postgres
         mapper.MapComposite<UserEntityV1>("users_v1", Translator);
         mapper.MapComposite<TaskEntityV1>("tasks_v1", Translator);
         mapper.MapComposite<TaskLogEntityV1>("task_logs_v1", Translator);
+        mapper.MapComposite<TaskCommentEntityV1>("task_comments_v1", Translator);
     }
 
     /// <summary>
