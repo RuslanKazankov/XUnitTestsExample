@@ -46,4 +46,9 @@ public static class TaskEntityV1Faker
         this TaskEntityV1 src,
         long parentTaskId)
         => src with { ParentTaskId = parentTaskId };
+
+    public static TaskEntityV1 WithTitle(
+        this TaskEntityV1 src,
+        string title)
+        => src with { Title = title };
 }
