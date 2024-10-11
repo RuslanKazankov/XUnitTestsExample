@@ -98,4 +98,45 @@ update tasks
                 },
                 cancellationToken: token));
     }
+
+    public async Task<SubTaskModel[]> GetSubTasksInStatus(long parentTaskId, TaskStatus[] statuses, CancellationToken token)
+    {
+        const string sqlQuery = @"
+with recursive tasks_tree
+  as (select t.id
+           , t.title
+           , t.status
+           , t.parent_task_id
+           , array[t.parent_task_id, t.id] as path
+        from tasks t
+       where t.parent_task_id = @ParentTaskId
+         and t.status = any(@Statuses)
+       union all
+      select t.id
+           , t.title
+           , t.status
+           , t.parent_task_id
+           , tt.path || t.id as path
+        from tasks t
+        join tasks_tree tt on tt.id = t.parent_task_id)
+
+select t.id
+     , t.title
+     , t.status
+     , t.path as path
+  from tasks_tree t
+";
+        await using var connection = await GetConnection();
+        var subTaskModels = await connection.QueryAsync<SubTaskModel>(
+            new CommandDefinition(
+                sqlQuery,
+                new
+                {
+                    ParentTaskId = parentTaskId,
+                    Statuses = statuses
+                }, 
+                cancellationToken: token));
+
+        return subTaskModels.ToArray();
+    }
 }
