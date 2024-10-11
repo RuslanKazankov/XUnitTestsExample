@@ -34,6 +34,7 @@ services.AddStackExchangeRedisCache(options =>
     options.Configuration = builder.Configuration["DalOptions:RedisConnectionString"];
 });
 
+services.AddGrpc();
 services.AddGrpcReflection();
 
 
