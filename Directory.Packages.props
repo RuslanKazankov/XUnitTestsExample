@@ -1,0 +1,36 @@
+<Project>
+  <ItemGroup>
+    <PackageVersion Include="Grpc.AspNetCore" Version="2.49.0"/>
+    <PackageVersion Include="Grpc.AspNetCore.Server.Reflection" Version="2.57.0" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.11" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+
+    <PackageVersion Include="Dapper" Version="2.0.123" />
+    <PackageVersion Include="FluentValidation.AspNetCore" Version="10.3.6" />
+    <PackageVersion Include="FluentMigrator" Version="3.3.2" />
+    <PackageVersion Include="FluentMigrator.Runner" Version="3.3.2" />
+    <PackageVersion Include="FluentMigrator.Runner.Postgres" Version="3.3.2" />
+    <PackageVersion Include="npgsql" Version="6.0.3" />
+    <PackageVersion Include="StackExchange.Redis" Version="2.6.122" />
+
+    <PackageVersion Include="Google.Protobuf" Version="3.24.3" />
+    <PackageVersion Include="Grpc.Net.Client" Version="2.57.0" />
+    <PackageVersion Include="Grpc.Tools" Version="2.58.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2"/>
+    <PackageVersion Include="xunit" Version="2.5.0"/>
+    <PackageVersion Include="AutoBogus" Version="2.13.1"/>
+    <PackageVersion Include="FluentAssertions" Version="6.12.0"/>
+    <PackageVersion Include="Moq" Version="4.20.69"/>
+    <PackageVersion Include="Bogus" Version="34.0.2"/>
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+  </ItemGroup>
+</Project>

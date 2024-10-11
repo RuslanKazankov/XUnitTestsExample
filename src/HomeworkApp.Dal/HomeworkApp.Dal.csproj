@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="Dapper"/>
+    <PackageReference Include="FluentValidation.AspNetCore"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
+    <PackageReference Include="FluentMigrator"/>
+    <PackageReference Include="FluentMigrator.Runner"/>
+    <PackageReference Include="FluentMigrator.Runner.Postgres"/>
+    <PackageReference Include="npgsql"/>
+    <PackageReference Include="StackExchange.Redis"/>
+  </ItemGroup>
+</Project>
