@@ -91,4 +91,40 @@ public class TaskRepositoryTests
         expectedTask = expectedTask with {Status = assign.Status};
         task.Should().BeEquivalentTo(expectedTask);
     }
+
+    [Fact]
+    public async Task GetSubTasksInStatus_Success()
+    {
+        // Arrange
+        var expectedTitle = "Expected title";
+        var parentsTasks = TaskEntityV1Faker.Generate();
+        var expectedParentId = parentsTasks.First().Id;
+
+        var subTasks = TaskEntityV1Faker.Generate(10)
+            .Select(p => p.WithParentTaskId(expectedParentId).WithTitle(expectedTitle))
+            .ToArray();
+        var parentsTaskIds = await _repository.Add(parentsTasks, default);
+        var subTaskIds = await _repository.Add(subTasks, default);
+        var expectedTaskId = subTaskIds[0];
+
+        var expectedTaskStatuses = new TaskStatus [] { (TaskStatus)subTasks[0].Status };
+
+        SubTaskModel expectedFirstSubTask = new SubTaskModel {
+            TaskId = expectedTaskId,
+            Title = expectedTitle,
+            Status = expectedTaskStatuses[0],
+            ParentTaskIds = new long[] {expectedParentId, expectedTaskId},
+        };
+
+        // Act
+        var results = await _repository.GetSubTasksInStatus(expectedParentId, expectedTaskStatuses, default);
+
+        // Asserts
+        results.Should().NotBeEmpty();
+        results.Should().OnlyContain(st => expectedTaskStatuses.Contains(st.Status));
+
+        var subTask = results.Where(st => st.TaskId == expectedTaskId).FirstOrDefault();
+        subTask.Should().NotBeNull();
+        subTask.Should().BeEquivalentTo(expectedFirstSubTask);
+    }
 }
