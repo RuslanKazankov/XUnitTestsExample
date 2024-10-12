@@ -6,14 +6,13 @@ using HomeworkApp.Dal.Settings;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace HomeworkApp.Dal.Repositories;
-public class TaskCommenRepository : PgRepository, ITaskCommentRepository
+public class TaskCommentRepository : PgRepository, ITaskCommentRepository
 {
-    public TaskCommenRepository(
+    public TaskCommentRepository(
         IOptions<DalOptions> dalSettings) : base(dalSettings.Value)
     {
     }
@@ -33,7 +32,7 @@ returning id;
                 sqlQuery,
                 new
                 {
-                    TaskComment = model
+                    TaskComment = new[] { model }
                 },
                 cancellationToken: token));
 
@@ -52,8 +51,8 @@ select id
      , deleted_at
   from task_comments
  where task_id = @TaskCommentId
-   and (deleted_at is null = @IncludeDeleted 
-       or deleted_at is not null)
+   and ((deleted_at is not null) = @IncludeDeleted 
+       or deleted_at is null)
  order by at desc
 ";
 
