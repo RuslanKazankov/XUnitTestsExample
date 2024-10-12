@@ -20,17 +20,20 @@ public class TaskService : ITaskService
 
     private readonly ITaskRepository _taskRepository;
     private readonly ITaskLogRepository _taskLogRepository;
+    private readonly ITaskCommentRepository _taskCommentRepository;
     private readonly ITakenTaskRepository _takenTaskRepository;
     private readonly IDistributedCache _distributedCache;
 
     public TaskService(
         ITaskRepository taskRepository,
         ITaskLogRepository taskLogRepository,
+        ITaskCommentRepository taskCommentRepository,
         ITakenTaskRepository takenTaskRepository,
         IDistributedCache distributedCache)
     {
         _taskRepository = taskRepository;
         _taskLogRepository = taskLogRepository;
+        _taskCommentRepository = taskCommentRepository;
         _takenTaskRepository = takenTaskRepository;
         _distributedCache = distributedCache;
     }
@@ -188,5 +191,47 @@ public class TaskService : ITaskService
                 Timeout = TimeSpan.FromSeconds(5)
             },
             TransactionScopeAsyncFlowOption.Enabled);
+    }
+
+    public async Task<TaskMessage[]> GetComments(long taskId, CancellationToken token)
+    {
+        const int CountMessages = 5;
+        const int CacheTime = 5;
+
+        var cacheKey = $"cache_task_comments:{taskId}";
+        var cachedMessages = await _distributedCache.GetStringAsync(cacheKey, token);
+        if (!string.IsNullOrEmpty(cachedMessages))
+        {
+            return JsonSerializer.Deserialize<TaskMessage[]>(cachedMessages);
+        }
+
+        var taskComments = await _taskCommentRepository.Get(new TaskCommentGetModel
+        {
+            TaskId = taskId,
+            IncludeDeleted = true
+        }, token);
+
+        var result = taskComments
+            .TakeLast(CountMessages)
+            .Select(x => new TaskMessage
+            {
+                At = x.At,
+                Comment = x.Message,
+                IsDeleted = x.DeletedAt is not null,
+                TaskId = x.TaskId
+            })
+            .ToArray();
+
+        var taskMessagesJson = JsonSerializer.Serialize(result);
+        await _distributedCache.SetStringAsync(
+            cacheKey,
+            taskMessagesJson,
+            new DistributedCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(CacheTime)
+            },
+            token);
+
+        return result;
     }
 }
