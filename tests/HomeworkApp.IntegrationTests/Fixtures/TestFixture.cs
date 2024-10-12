@@ -17,8 +17,9 @@ namespace HomeworkApp.IntegrationTests.Fixtures
 
         public ITaskLogRepository TaskLogRepository { get; }
 
-        public ITakenTaskRepository TakenTaskRepository { get; }
+        public ITaskCommentRepository TaskCommentRepository { get; }
 
+        public ITakenTaskRepository TakenTaskRepository { get; }
 
         public IUserScheduleRepository UserScheduleRepository { get; }
 
@@ -53,6 +54,7 @@ namespace HomeworkApp.IntegrationTests.Fixtures
             UserRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
             TaskRepository = scope.ServiceProvider.GetRequiredService<ITaskRepository>();
             TaskLogRepository = scope.ServiceProvider.GetRequiredService<ITaskLogRepository>();
+            TaskCommentRepository = scope.ServiceProvider.GetRequiredService<ITaskCommentRepository>();
             TakenTaskRepository = scope.ServiceProvider.GetRequiredService<ITakenTaskRepository>();
             UserScheduleRepository = scope.ServiceProvider.GetRequiredService<IUserScheduleRepository>();
 
